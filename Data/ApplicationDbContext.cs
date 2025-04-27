@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebApp.Models;
+using TrackerWebApp.Models;
 
-namespace WebApp.Data
+namespace TrackerWebApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

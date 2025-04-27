@@ -1,0 +1,18 @@
+﻿@model TrackerWebApp.Models.Budget
+
+@{
+    ViewData["Title"] = "Delete Budget";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Are you sure you want to delete this?</h4>
+<div>
+    <strong>@Model.Name</strong> (Limit: @Model.Limit.ToString("C"))
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="BudgetId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

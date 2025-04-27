@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
-using WebApp.Data;
+using TrackerWebApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using TrackerWebApp.Models;
 
-namespace WebApp.Models
+namespace TrackerWebApp.Models
 {
     public class Budget
     {
