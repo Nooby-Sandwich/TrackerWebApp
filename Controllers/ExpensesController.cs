@@ -17,70 +17,65 @@ namespace TrackerWebApp.Controllers
             _context = context;
         }
 
-        // GET: /Expenses
+        // GET: Expenses
         public async Task<IActionResult> Index()
         {
-            var expenses = await _context.Expenses
-                                         .Include(e => e.Budget)
-                                         .ToListAsync();
-            return View(expenses);
+            var expenses = _context.Expenses.Include(e => e.Budget);
+            return View(await expenses.ToListAsync());
         }
 
-
-        // GET: /Expenses/Details/5
+        // GET: Expenses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
             var expense = await _context.Expenses
                 .Include(e => e.Budget)
-                .FirstOrDefaultAsync(e => e.ExpenseId == id);
+                .FirstOrDefaultAsync(m => m.ExpenseId == id);
             if (expense == null) return NotFound();
 
             return View(expense);
         }
 
-        // GET: /Expenses/Create
+        // GET: Expenses/Create
         public IActionResult Create()
         {
-            PopulateBudgetsDropDown();
+            ViewData["BudgetId"] = new SelectList(_context.Budgets, "BudgetId", "Name");
             return View();
         }
 
-        // POST: /Expenses/Create
+        // POST: Expenses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Expense expense)
+        public async Task<IActionResult> Create([Bind("Description,Amount,Date,BudgetId")] Expense expense)
         {
             if (ModelState.IsValid)
             {
-                await _context.Expenses.AddAsync(expense);
+                _context.Add(expense);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            PopulateBudgetsDropDown(expense.BudgetId);
+            ViewData["BudgetId"] = new SelectList(_context.Budgets, "BudgetId", "Name", expense.BudgetId);
             return View(expense);
         }
 
-        // GET: /Expenses/Edit/5
+        // GET: Expenses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
             var expense = await _context.Expenses.FindAsync(id);
             if (expense == null) return NotFound();
-
-            PopulateBudgetsDropDown(expense.BudgetId);
+            ViewData["BudgetId"] = new SelectList(_context.Budgets, "BudgetId", "Name", expense.BudgetId);
             return View(expense);
         }
 
-        // POST: /Expenses/Edit/5
+        // POST: Expenses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Expense expense)
+        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Description,Amount,Date,BudgetId")] Expense expense)
         {
-            if (id != expense.ExpenseId) return BadRequest();
+            if (id != expense.ExpenseId) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -88,56 +83,43 @@ namespace TrackerWebApp.Controllers
                 {
                     _context.Update(expense);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await ExpenseExists(expense.ExpenseId)) return NotFound();
+                    if (!ExpenseExists(expense.ExpenseId)) return NotFound();
                     throw;
                 }
+                return RedirectToAction(nameof(Index));
             }
-
-            PopulateBudgetsDropDown(expense.BudgetId);
+            ViewData["BudgetId"] = new SelectList(_context.Budgets, "BudgetId", "Name", expense.BudgetId);
             return View(expense);
         }
 
-        // GET: /Expenses/Delete/5
+        // GET: Expenses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
             var expense = await _context.Expenses
                 .Include(e => e.Budget)
-                .FirstOrDefaultAsync(e => e.ExpenseId == id);
+                .FirstOrDefaultAsync(m => m.ExpenseId == id);
             if (expense == null) return NotFound();
 
             return View(expense);
         }
 
-        // POST: /Expenses/Delete/5
+        // POST: Expenses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null) return NotFound();
-
-            _context.Expenses.Remove(expense);
+            _context.Expenses.Remove(expense!);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> ExpenseExists(int id)
-            => await _context.Expenses.AnyAsync(e => e.ExpenseId == id);
-
-        private void PopulateBudgetsDropDown(object? selectedBudget = null)
-        {
-            ViewData["BudgetId"] = new SelectList(
-                _context.Budgets,
-                nameof(Budget.BudgetId),
-                nameof(Budget.Name),
-                selectedBudget
-            );
-        }
+        private bool ExpenseExists(int id)
+            => _context.Expenses.Any(e => e.ExpenseId == id);
     }
 }

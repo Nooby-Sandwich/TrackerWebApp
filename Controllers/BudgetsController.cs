@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
@@ -16,100 +17,111 @@ namespace TrackerWebApp.Controllers
             _context = context;
         }
 
-        // GET: Budgets
+        // GET: /Budgets
         public async Task<IActionResult> Index()
         {
             var budgets = await _context.Budgets.ToListAsync();
             return View(budgets);
         }
 
-        // GET: Budgets/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: /Budgets/Create
+        public IActionResult Create()
+            => View();
+
+        // POST: /Budgets/Create
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(IFormCollection form)
         {
-            if (id == null) return NotFound();
+            // Grab raw form values
+            var name = form["Name"].ToString();
+            var limitRaw = form["Limit"].ToString();
+            decimal limit = 0;
+            var ok = decimal.TryParse(limitRaw, out limit);
 
-            var budget = await _context.Budgets
-                .FirstOrDefaultAsync(m => m.BudgetId == id);
+            // Simple validation
+            if (string.IsNullOrWhiteSpace(name))
+                ModelState.AddModelError("Name", "Name is required.");
+            if (!ok)
+                ModelState.AddModelError("Limit", "Limit must be a number.");
 
-            if (budget == null) return NotFound();
-            return View(budget);
-        }
-
-        // GET: Budgets/Create
-        public IActionResult Create() => View();
-
-        // POST: Budgets/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Limit")] Budget budget)
-        {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(budget);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Render form again with errors
+                return View();
             }
-            return View(budget);
+
+            // Build & save
+            var budget = new Budget
+            {
+                Name = name,
+                Limit = limit
+            };
+
+            _context.Budgets.Add(budget);
+            await _context.SaveChangesAsync();
+
+            // Verify it got an ID
+            // Debug.WriteLine($"Saved budget id: {budget.BudgetId}");
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Budgets/Edit/5
+        // GET: /Budgets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
             var budget = await _context.Budgets.FindAsync(id);
             if (budget == null) return NotFound();
+
             return View(budget);
         }
 
-        // POST: Budgets/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        // POST: /Budgets/Edit/5
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("BudgetId,Name,Limit")] Budget budget)
         {
-            if (id != budget.BudgetId) return NotFound();
+            if (id != budget.BudgetId) return BadRequest();
+            if (!ModelState.IsValid) return View(budget);
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(budget);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BudgetExists(budget.BudgetId)) return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(budget);
+                await _context.SaveChangesAsync();
             }
-            return View(budget);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _context.Budgets.AnyAsync(e => e.BudgetId == budget.BudgetId))
+                    return NotFound();
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Budgets/Delete/5
+        // GET: /Budgets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
             var budget = await _context.Budgets
-                .FirstOrDefaultAsync(m => m.BudgetId == id);
+                .FirstOrDefaultAsync(b => b.BudgetId == id);
             if (budget == null) return NotFound();
 
             return View(budget);
         }
 
-        // POST: Budgets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        // POST: /Budgets/Delete/5
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var budget = await _context.Budgets.FindAsync(id);
-            _context.Budgets.Remove(budget!);
-            await _context.SaveChangesAsync();
+            if (budget != null)
+            {
+                _context.Budgets.Remove(budget);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
-
-        private bool BudgetExists(int id)
-            => _context.Budgets.Any(e => e.BudgetId == id);
     }
 }
