@@ -1,8 +1,237 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using System.Text.Json
+@{
+    ViewData["Title"] = "Finance Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="h2 fw-bold text-primary">Financial Overview</h1>
+            <p class="text-muted">Track your budgets and expenses effectively</p>
+        </div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newChartModal">
+            <i class="bi bi-plus-circle me-2"></i>Create Chart
+        </button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-wallet2 text-primary fs-4"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="mb-0">@((decimal)ViewData["TotalBudgeted"]).ToString("C")</h3>
+                            <span class="text-muted">Total Budgeted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-cash-stack text-success fs-4"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="mb-0">@((decimal)ViewData["TotalSpent"]).ToString("C")</h3>
+                            <span class="text-muted">Total Spent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-journal-text text-info fs-4"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="mb-0">@ViewData["TotalBudgets"]</h3>
+                            <span class="text-muted">Budgets Created</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-receipt text-warning fs-4"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h3 class="mb-0">@ViewData["TotalExpenses"]</h3>
+                            <span class="text-muted">Expenses Logged</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div class="row row-cols-1 row-cols-lg-2 g-4" id="chartContainer">
+        <!-- Dynamic charts will be inserted here -->
+    </div>
 </div>
+
+<!-- New Chart Modal -->
+<div class="modal fade" id="newChartModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Chart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Chart Type</label>
+                    <select class="form-select" id="chartType">
+                        <option value="donut">Donut Chart</option>
+                        <option value="line">Trend Line</option>
+                        <option value="bar">Vertical Bars</option>
+                        <option value="horizontalBar">Horizontal Bars</option>
+                        <option value="radar">Radar Chart</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Data Source</label>
+                    <select class="form-select" id="dataSource">
+                        <option value="byBudget">Spending by Budget</option>
+                        <option value="monthly">Monthly Expenses</option>
+                        <option value="budVsAct">Budget vs Actual</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="addChart">Add Chart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .chart-card {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 1rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+            .chart-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .chart-actions {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .chart-card:hover .chart-actions {
+            opacity: 1;
+        }
+
+        .modal-dialog {
+            max-width: 400px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const chartData = {
+            byBudget: @Html.Raw(ViewBag.ByBudgetJson),
+            monthly:  @Html.Raw(ViewBag.MonthlyJson),
+            budVsAct: @Html.Raw(ViewBag.BudVsActJson)
+        };
+
+        function createChartConfig(type, dataSource) {
+            const data = chartData[dataSource];
+            const colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
+
+            const commonOptions = {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { enabled: true }
+                }
+            };
+
+            switch (type) {
+                case 'donut':
+                    return {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.map(x => x.Name),
+                            datasets: [{ data: data.map(x => x.Total), backgroundColor: colors }]
+                        },
+                        options: { ...commonOptions, cutout: '70%' }
+                    };
+
+                case 'line':
+                    return {
+                        type: 'line',
+                        data: {
+                            labels: data.map(m => `${m.Year}-${String(m.Month).padStart(2,'0')}`),
+                            datasets: [{
+                                label: 'Monthly Spending',
+                                data: data.map(m => m.Total),
+                                borderColor: colors[0],
+                                tension: 0.3,
+                                fill: true,
+                                backgroundColor: function(ctx) {
+                                    const gradient = ctx.chart.ctx.createLinearGradient(0,0,0,400);
+                                    gradient.addColorStop(0, `${colors[0]}40`);
+                                    gradient.addColorStop(1, `${colors[0]}00`);
+                                    return gradient;
+                                }
+                            }]
+                        },
+                        options: { ...commonOptions, scales: { y: { beginAtZero: true } } }
+                    };
+
+                // you can add the bar, horizontalBar, radar cases similarly...
+                default:
+                    throw new Error('Unknown chart type: ' + type);
+            }
+        }
+
+        document.getElementById('addChart').addEventListener('click', () => {
+            const type       = document.getElementById('chartType').value;
+            const dataSource = document.getElementById('dataSource').value;
+            const chartId    = `chart-${Date.now()}`;
+
+            const col = document.createElement('div');
+            col.className = 'col chart-card p-3 position-relative';
+            col.innerHTML = `
+                <div class="chart-actions">
+                    <button class="btn btn-sm btn-secondary me-2"><i class="bi bi-download"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="this.closest('.col').remove()"><i class="bi bi-trash"></i></button>
+                </div>
+                <canvas id="${chartId}" height="300"></canvas>
+            `;
+            document.getElementById('chartContainer').prepend(col);
+
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, createChartConfig(type, dataSource));
+
+            var modal = bootstrap.Modal.getInstance(document.getElementById('newChartModal'));
+            modal.hide();
+        });
+    </script>
+}
