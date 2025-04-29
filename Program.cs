@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
-using TrackerWebApp.Data;
+using TrackerWebApp.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 // Add MVC + Razor
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
 
 var app = builder.Build();
 // Configure middleware (error pages, static files, routing)

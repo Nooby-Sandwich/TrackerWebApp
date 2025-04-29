@@ -15,6 +15,12 @@
   <ItemGroup>
     <Content Include="Areas\Identity\Pages\Account\Login.cshtml.cs" />
     <Content Include="Areas\Identity\Pages\Account\Register.cshtml.cs" />
+    <Content Include="Services\CurrencyService.cs" />
+    <Content Include="Services\ICurrencyService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Travel\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
