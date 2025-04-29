@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
 using TrackerWebApp.Models;
-using System.Text.Json;
 
 namespace TrackerWebApp.Controllers
 {
@@ -28,18 +28,18 @@ namespace TrackerWebApp.Controllers
         {
             try
             {
-                // Create the view model using external types
                 var dashboardData = new DashboardViewModel
                 {
-                    Totals = await GetFinancialTotals(),
-                    ChartData = await GetChartData()
+                    Totals = await GetFinancialTotalsAsync(),
+                    ChartData = await GetChartDataAsync()
                 };
 
-                AddViewDataForCharts(dashboardData.ChartData);
+                SetChartViewData(dashboardData.ChartData);
                 ViewBag.BudgetsList = await _context.Budgets.OrderBy(b => b.Name).ToListAsync();
+
                 return View(dashboardData);
             }
-            catch
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "Error loading dashboard data";
                 return RedirectToAction("Error", "Home");
@@ -59,22 +59,24 @@ namespace TrackerWebApp.Controllers
 
             try
             {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                await ClearExistingBudgets();
-                await CreateNewBudgets(salary, preset);
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+                await ClearBudgetsAsync();
+                await CreateBudgetsAsync(salary, preset);
                 await transaction.CommitAsync();
+
                 TempData["SuccessMessage"] = "Budget setup completed successfully";
-                return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
                 TempData["SetupError"] = "Error configuring budgets";
-                return RedirectToAction(nameof(Index));
             }
+
+            return RedirectToAction(nameof(Index));
         }
 
         #region Private Methods
-        private async Task<FinancialTotals> GetFinancialTotals()
+
+        private async Task<FinancialTotals> GetFinancialTotalsAsync()
         {
             return new FinancialTotals
             {
@@ -85,26 +87,28 @@ namespace TrackerWebApp.Controllers
             };
         }
 
-        private async Task<ChartData> GetChartData()
+        private async Task<ChartData> GetChartDataAsync()
         {
-            var byBudget = await GetBudgetExpenses();
-            var monthly = await GetMonthlyExpenses();
-            var budgetVsActual = CalculateBudgetVsActual(byBudget);
+            var budgetExpenses = await GetBudgetExpensesAsync();
+            var monthlyExpenses = await GetMonthlyExpensesAsync();
+            var comparisons = GetBudgetVsActual(budgetExpenses);
 
             return new ChartData
             {
-                ByBudget = byBudget,
-                Monthly = monthly,
-                BudgetVsActual = budgetVsActual
+                ByBudget = budgetExpenses,
+                Monthly = monthlyExpenses,
+                BudgetVsActual = comparisons
             };
         }
 
-        private async Task<List<BudgetExpense>> GetBudgetExpenses()
-            => await _context.Budgets
+        private async Task<List<BudgetExpense>> GetBudgetExpensesAsync()
+        {
+            return await _context.Budgets
                 .Select(b => new BudgetExpense(b.Name, b.Expenses.Sum(e => e.Amount)))
                 .ToListAsync();
+        }
 
-        private async Task<List<MonthlyExpense>> GetMonthlyExpenses()
+        private async Task<List<MonthlyExpense>> GetMonthlyExpensesAsync()
         {
             var sixMonthsAgo = DateTime.Today.AddMonths(-5);
             var startDate = new DateTime(sixMonthsAgo.Year, sixMonthsAgo.Month, 1);
@@ -117,36 +121,39 @@ namespace TrackerWebApp.Controllers
                 .ToListAsync();
         }
 
-        private List<BudgetComparison> CalculateBudgetVsActual(List<BudgetExpense> budgetExpenses)
-            => budgetExpenses
-                .Select(b => new BudgetComparison(
-                    b.Category,
-                    _context.Budgets.FirstOrDefault(x => x.Name == b.Category)?.Limit ?? 0m,
-                    b.TotalSpent))
-                .ToList();
+        private List<BudgetComparison> GetBudgetVsActual(IEnumerable<BudgetExpense> budgetExpenses)
+        {
+            return budgetExpenses.Select(b =>
+            {
+                var limit = _context.Budgets.FirstOrDefault(x => x.Name == b.Category)?.Limit ?? 0m;
+                return new BudgetComparison(b.Category, limit, b.TotalSpent);
+            }).ToList();
+        }
 
-        private void AddViewDataForCharts(ChartData chartData)
+        private void SetChartViewData(ChartData chartData)
         {
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
             ViewData["ByBudgetJson"] = JsonSerializer.Serialize(chartData.ByBudget, options);
             ViewData["MonthlyJson"] = JsonSerializer.Serialize(chartData.Monthly, options);
             ViewData["BudgetVsActualJson"] = JsonSerializer.Serialize(chartData.BudgetVsActual, options);
         }
 
-        private async Task ClearExistingBudgets()
+        private async Task ClearBudgetsAsync()
         {
-            var existing = await _context.Budgets.ToListAsync();
-            _context.Budgets.RemoveRange(existing);
+            var budgets = await _context.Budgets.ToListAsync();
+            _context.Budgets.RemoveRange(budgets);
             await _context.SaveChangesAsync();
         }
 
-        private async Task CreateNewBudgets(decimal salary, string presetKey)
+        private async Task CreateBudgetsAsync(decimal salary, string presetKey)
         {
             var preset = PresetProfile.GetPreset(presetKey);
-            var budgets = preset.CalculateBudgets(salary);
-            await _context.Budgets.AddRangeAsync(budgets);
+            var newBudgets = preset.CalculateBudgets(salary);
+            await _context.Budgets.AddRangeAsync(newBudgets);
             await _context.SaveChangesAsync();
         }
+
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SriVWaTimRaiCD16bYJdY5wU76TZJgQlkuDjMtVK8ME=",
+  "Hash": "bC+Ui4ysycmS7FkTl0KddrrHP0R3dlndUJcu8gOg/Bs=",
   "Source": "TrackerWebApp",
   "BasePath": "_content/TrackerWebApp",
   "Mode": "Default",
@@ -1718,12 +1718,12 @@
       "OriginalItemSpec": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Identity": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-0p0a5u4sym.gz",
+      "Identity": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-ijxaue91l7.gz",
       "SourceId": "TrackerWebApp",
       "SourceType": "Computed",
       "ContentRoot": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/TrackerWebApp",
-      "RelativePath": "TrackerWebApp#[.{fingerprint=0p0a5u4sym}]?.styles.css.gz",
+      "RelativePath": "TrackerWebApp#[.{fingerprint=ijxaue91l7}]?.styles.css.gz",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Alternative",
@@ -1732,8 +1732,8 @@
       "RelatedAsset": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\bundle\\TrackerWebApp.styles.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "jjq7g9pps5",
-      "Integrity": "4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=",
+      "Fingerprint": "yqzrj1zq0r",
+      "Integrity": "ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\bundle\\TrackerWebApp.styles.css"
@@ -1760,12 +1760,12 @@
       "OriginalItemSpec": "C:\\Users\\avin7\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.4\\staticwebassets\\V5\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Identity": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-0p0a5u4sym.gz",
+      "Identity": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-ijxaue91l7.gz",
       "SourceId": "TrackerWebApp",
       "SourceType": "Computed",
       "ContentRoot": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/TrackerWebApp",
-      "RelativePath": "TrackerWebApp#[.{fingerprint=0p0a5u4sym}]!.bundle.scp.css.gz",
+      "RelativePath": "TrackerWebApp#[.{fingerprint=ijxaue91l7}]!.bundle.scp.css.gz",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Alternative",
@@ -1774,8 +1774,8 @@
       "RelatedAsset": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "jjq7g9pps5",
-      "Integrity": "4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=",
+      "Fingerprint": "yqzrj1zq0r",
+      "Integrity": "ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css"
@@ -4000,8 +4000,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "0p0a5u4sym",
-      "Integrity": "BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=",
+      "Fingerprint": "ijxaue91l7",
+      "Integrity": "Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\bundle\\TrackerWebApp.styles.css"
@@ -4021,8 +4021,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "0p0a5u4sym",
-      "Integrity": "BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=",
+      "Fingerprint": "ijxaue91l7",
+      "Integrity": "Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css"
@@ -34773,13 +34773,13 @@
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.bundle.scp.css",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-0p0a5u4sym.gz",
+      "Route": "TrackerWebApp.bundle.scp.css",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-ijxaue91l7.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001828153565"
+          "Quality": "0.001597444089"
         }
       ],
       "ResponseHeaders": [
@@ -34789,19 +34789,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         },
         {
           "Name": "Content-Encoding",
@@ -34817,26 +34817,18 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "W/\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
-        },
-        {
-          "Name": "label",
-          "Value": "TrackerWebApp.bundle.scp.css"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.bundle.scp.css",
+      "Route": "TrackerWebApp.bundle.scp.css",
       "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -34846,7 +34838,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1131"
+          "Value": "2266"
         },
         {
           "Name": "Content-Type",
@@ -34854,11 +34846,156 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
+        }
+      ]
+    },
+    {
+      "Route": "TrackerWebApp.bundle.scp.css.gz",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-ijxaue91l7.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "625"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI="
+        }
+      ]
+    },
+    {
+      "Route": "TrackerWebApp.ijxaue91l7.bundle.scp.css",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-ijxaue91l7.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.001597444089"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "625"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ijxaue91l7"
+        },
+        {
+          "Name": "label",
+          "Value": "TrackerWebApp.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
+        }
+      ]
+    },
+    {
+      "Route": "TrackerWebApp.ijxaue91l7.bundle.scp.css",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2266"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -34868,7 +35005,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
+          "Value": "ijxaue91l7"
         },
         {
           "Name": "label",
@@ -34876,13 +35013,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.bundle.scp.css.gz",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-0p0a5u4sym.gz",
+      "Route": "TrackerWebApp.ijxaue91l7.bundle.scp.css.gz",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-ijxaue91l7.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -34891,7 +35028,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "Content-Type",
@@ -34899,11 +35036,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -34921,7 +35058,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
+          "Value": "ijxaue91l7"
         },
         {
           "Name": "label",
@@ -34929,18 +35066,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y="
+          "Value": "sha256-ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI="
         }
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.styles.css",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-0p0a5u4sym.gz",
+      "Route": "TrackerWebApp.ijxaue91l7.styles.css",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-ijxaue91l7.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001828153565"
+          "Quality": "0.001597444089"
         }
       ],
       "ResponseHeaders": [
@@ -34950,15 +35087,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -34978,13 +35115,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "W/\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
+          "Value": "ijxaue91l7"
         },
         {
           "Name": "label",
@@ -34992,12 +35129,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.styles.css",
+      "Route": "TrackerWebApp.ijxaue91l7.styles.css",
       "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\bundle\\TrackerWebApp.styles.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -35007,7 +35144,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1131"
+          "Value": "2266"
         },
         {
           "Name": "Content-Type",
@@ -35015,11 +35152,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -35029,7 +35166,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
+          "Value": "ijxaue91l7"
         },
         {
           "Name": "label",
@@ -35037,13 +35174,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
     {
-      "Route": "TrackerWebApp.0p0a5u4sym.styles.css.gz",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-0p0a5u4sym.gz",
+      "Route": "TrackerWebApp.ijxaue91l7.styles.css.gz",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-ijxaue91l7.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -35052,7 +35189,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "Content-Type",
@@ -35060,11 +35197,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -35082,7 +35219,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "0p0a5u4sym"
+          "Value": "ijxaue91l7"
         },
         {
           "Name": "label",
@@ -35090,155 +35227,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y="
-        }
-      ]
-    },
-    {
-      "Route": "TrackerWebApp.bundle.scp.css",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-0p0a5u4sym.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.001828153565"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "546"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
-        }
-      ]
-    },
-    {
-      "Route": "TrackerWebApp.bundle.scp.css",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\TrackerWebApp.bundle.scp.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1131"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
-        }
-      ]
-    },
-    {
-      "Route": "TrackerWebApp.bundle.scp.css.gz",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7vhr25e0eo-0p0a5u4sym.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "546"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y="
+          "Value": "sha256-ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI="
         }
       ]
     },
     {
       "Route": "TrackerWebApp.styles.css",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-0p0a5u4sym.gz",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-ijxaue91l7.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001828153565"
+          "Quality": "0.001597444089"
         }
       ],
       "ResponseHeaders": [
@@ -35248,15 +35248,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -35276,13 +35276,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "W/\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
@@ -35297,7 +35297,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1131"
+          "Value": "2266"
         },
         {
           "Name": "Content-Type",
@@ -35305,11 +35305,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE=\""
+          "Value": "\"Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -35319,13 +35319,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-BL8bQmcufQFY6vhEyPboWOFhcoCnR8KdlC5mHOgYNaE="
+          "Value": "sha256-Tm5EmDwubswVo7VOAhqUQeEK84gKo/0sJYx8a3oXM5k="
         }
       ]
     },
     {
       "Route": "TrackerWebApp.styles.css.gz",
-      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-0p0a5u4sym.gz",
+      "AssetFile": "D:\\repo\\TrackerWebApp\\TrackerWebApp\\obj\\Debug\\net9.0\\compressed\\7mikwobkgo-ijxaue91l7.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -35334,7 +35334,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "546"
+          "Value": "625"
         },
         {
           "Name": "Content-Type",
@@ -35342,11 +35342,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y=\""
+          "Value": "\"ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 28 Apr 2025 03:40:04 GMT"
+          "Value": "Tue, 29 Apr 2025 17:18:33 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -35364,7 +35364,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-4dlTmJU3iSrO2vdWHG1Z6xroFtxI66+jKXAgC8KT40Y="
+          "Value": "sha256-ujST2JJaXQ0YyfDmcITvLONrJGC0NEbBQG7SPDyW1jI="
         }
       ]
     }

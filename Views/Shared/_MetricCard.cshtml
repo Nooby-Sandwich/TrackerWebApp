@@ -1,0 +1,12 @@
+﻿@model TrackerWebApp.Models.MetricCardModel
+
+<div class="card text-white @Model.ColorClass mb-3" style="max-width: 18rem;">
+    <div class="card-header d-flex align-items-center">
+        <i class="@Model.Icon me-2"></i>
+        <span>@Model.Title</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.Value</h5>
+        <p class="card-text">@Model.Description</p>
+    </div>
+</div>

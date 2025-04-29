@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrackerWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1790ae05ed57ef2ee2b1058fd74979a40116fec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13f5c196fd48fccac451fad334e19000682e48d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrackerWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrackerWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
