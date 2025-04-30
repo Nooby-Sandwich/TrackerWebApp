@@ -405,3 +405,8 @@ D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\TrackerW.A14083F7.Up2Date
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\TrackerWebApp.dll
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\refint\TrackerWebApp.dll
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\TrackerWebApp.pdb
+D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\TrackerWebApp.deps.json
+D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\TrackerWebApp.runtimeconfig.json
+D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\TrackerWebApp.pdb
+D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\TrackerWebApp.genruntimeconfig.cache
+D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\ref\TrackerWebApp.dll

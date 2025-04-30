@@ -1,5 +1,4 @@
-﻿// Program.cs
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
 
@@ -10,24 +9,26 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// 2) Identity UI + EF store
-builder.Services.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = false)
+// 2) Identity core services
+builder.Services
+    .AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // 3) MVC controllers + views
 builder.Services.AddControllersWithViews();
 
-// 4) Razor Pages (for /Areas/Identity)
-builder.Services.AddRazorPages();
+// 4) NO Razor-Pages needed now — we’re using MVC AccountController
+// builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// 5) Middleware
+// 5) Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -35,11 +36,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 6) Routing
+// 6) Map MVC controllers only
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
-app.MapRazorPages();
+// app.MapRazorPages();  // <— no longer mapping Razor-Pages
 
 app.Run();
