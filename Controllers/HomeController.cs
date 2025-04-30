@@ -1,66 +1,72 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TrackerWebApp.Data;
 using TrackerWebApp.Models;
-using Microsoft.EntityFrameworkCore;
 
-namespace TrackerWebApp.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public HomeController(ApplicationDbContext context)
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
-        {
-            _logger = logger;
-            _context = context;
-        }
+    public async Task<IActionResult> Index()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // GET: /
-        public async Task<IActionResult> Index()
+        var budgets = await _context.Budgets
+            .Where(b => b.UserId == userId)
+            .ToListAsync();
+
+        var expenses = await _context.Expenses
+            .Where(e => e.UserId == userId)
+            .Include(e => e.Budget)
+            .ToListAsync();
+
+        var totals = new FinancialTotals
         {
-            // Prepare dashboard essentials
-            var totals = new FinancialTotals
+            TotalBudgeted = budgets.Sum(b => b.Limit),
+            TotalSpent = expenses.Sum(e => e.Amount),
+            TotalBudgets = budgets.Count,
+            TotalExpenses = expenses.Count
+        };
+
+        // FIXED: Changed b.Id to b.BudgetId
+        var budgetVsActual = budgets.Select(b => new CategoryBudgetActual(
+            b.Name,
+            b.Limit,
+            expenses.Where(e => e.BudgetId == b.BudgetId).Sum(e => e.Amount)
+        )).ToList();
+
+        var byCategory = expenses
+            .GroupBy(e => e.Budget?.Name ?? "Uncategorized")
+            .Select(g => new CategorySpend(g.Key, g.Sum(e => e.Amount)))
+            .ToList();
+
+        var monthlyTrend = expenses
+            .GroupBy(e => new { e.Date.Year, e.Date.Month })
+            .Select(g => new MonthlySpend(g.Key.Year, g.Key.Month, g.Sum(e => e.Amount)))
+            .OrderBy(g => g.Year)
+            .ThenBy(g => g.Month)
+            .ToList();
+
+        var model = new DashboardViewModel
+        {
+            Totals = totals,
+            ChartData = new ChartData
             {
-                TotalBudgets = await _context.Budgets.CountAsync(),
-                TotalExpenses = await _context.Expenses.CountAsync(),
-                TotalBudgeted = await _context.Budgets.SumAsync(b => (decimal?)b.Limit) ?? 0m,
-                TotalSpent = await _context.Expenses.SumAsync(e => (decimal?)e.Amount) ?? 0m
-            };
+                BudgetVsActual = budgetVsActual,
+                ByCategory = byCategory,
+                MonthlyTrend = monthlyTrend
+            },
+            PinnedCharts = new List<string> { "ByCategory", "MonthlyTrend", "BudgetVsActual" }
+        };
 
-            ViewBag.Budgets = await _context.Budgets.OrderBy(b => b.Name).ToListAsync();
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SetCurrency(string currency, string returnUrl)
-        {
-            if (!string.IsNullOrWhiteSpace(currency))
-            {
-                Response.Cookies.Append("SelectedCurrency", currency, new Microsoft.AspNetCore.Http.CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddDays(30),
-                    IsEssential = true
-                });
-            }
-
-            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return View(model);
     }
 }

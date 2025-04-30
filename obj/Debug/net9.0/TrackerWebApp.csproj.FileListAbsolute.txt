@@ -406,7 +406,7 @@ D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\ru\Microsoft.CodeAnalysis.S
 D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 D:\repo\TrackerWebApp\TrackerWebApp\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
-D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\scopedcss\Views\Shared\_MetricCard.cshtml.rz.scp.css
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\compressed\7mikwobkgo-ijxaue91l7.gz
 D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\compressed\7vhr25e0eo-ijxaue91l7.gz
+D:\repo\TrackerWebApp\TrackerWebApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

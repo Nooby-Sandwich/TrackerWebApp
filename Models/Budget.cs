@@ -8,6 +8,7 @@ namespace TrackerWebApp.Models
     {
         [Key]
         public int BudgetId { get; set; }
+        public string UserId { get; set; } 
 
         [Required]
         [StringLength(100)]
@@ -19,5 +20,7 @@ namespace TrackerWebApp.Models
 
         // Navigation property
         public ICollection<Expense> Expenses { get; set; }
+
+
     }
 }

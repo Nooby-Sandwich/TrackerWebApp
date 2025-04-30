@@ -9,6 +9,8 @@ namespace TrackerWebApp.Models
         [Key]
         public int ExpenseId { get; set; }
 
+        public string UserId { get; set; }
+
         [Required]
         [StringLength(200)]
         public string Description { get; set; }
@@ -25,4 +27,6 @@ namespace TrackerWebApp.Models
         public int BudgetId { get; set; }
         public Budget Budget { get; set; }
     }
+
+
 }

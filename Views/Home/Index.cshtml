@@ -1,26 +1,29 @@
 ﻿@model TrackerWebApp.Models.DashboardViewModel
 @using TrackerWebApp.Models
-@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Finance Dashboard";
-    var totals = Model?.Totals ?? new FinancialTotals();
-    var budgets = ViewBag.BudgetsList as List<Budget> ?? new List<Budget>();
+    var totals = Model.Totals;
+    var budgets = ViewBag.Budgets as List<Budget> ?? new List<Budget>();
+    var categoryExpenses = ViewBag.CategoryExpenses as Dictionary<string, decimal> ?? new();
+    var monthlyExpenses = ViewBag.MonthlyExpenses as Dictionary<string, decimal> ?? new();
+    var topCategories = ViewBag.TopCategories as Dictionary<string, decimal> ?? new();
 }
 
-<div class="container-fluid px-4">
+<canvas id="pieChart" width="400" height="200"></canvas>
+<canvas id="lineChart" width="400" height="200"></canvas>
+<canvas id="barChart" width="400" height="200"></canvas>
 
+<div class="container-fluid px-4">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center py-4 mb-4 border-bottom">
         <div>
             <h1 class="h2 fw-bold text-primary">Financial Dashboard</h1>
-            <p class="text-muted">Track your budgets and expenses in real time</p>
+            <p class="text-muted mb-0">Track your budgets and expenses in real time</p>
         </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#setupModal">
-                <i class="bi bi-percent me-1"></i> Budget Setup
-            </button>
-        </div>
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#setupModal">
+            <i class="bi bi-percent me-1"></i> Budget Setup
+        </button>
     </div>
 
     <!-- Metric Cards -->
@@ -28,24 +31,16 @@
         <div class="col-12 col-md-6 col-xl-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h6 class="text-uppercase text-muted">Total Income</h6>
-                    <h3>@totals.TotalIncome.ToString("C")</h3>
+                    <h6 class="text-uppercase text-muted">Total Budgeted</h6>
+                    <h3>@totals.TotalBudgeted.ToString("C")</h3>
                 </div>
             </div>
         </div>
         <div class="col-12 col-md-6 col-xl-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h6 class="text-uppercase text-muted">Total Expenses</h6>
-                    <h3>@totals.TotalExpenses.ToString("C")</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="text-uppercase text-muted">Net Balance</h6>
-                    <h3>@totals.NetBalance.ToString("C")</h3>
+                    <h6 class="text-uppercase text-muted">Total Spent</h6>
+                    <h3>@totals.TotalSpent.ToString("C")</h3>
                 </div>
             </div>
         </div>
@@ -57,10 +52,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted">Expenses Logged</h6>
+                    <h3>@totals.TotalExpenses</h3>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Quick-Add Widgets -->
     <div class="row g-4 mb-5">
+        <!-- Quick-Add Expense -->
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -81,13 +85,18 @@
                         <div class="col-3">
                             <input name="Amount" type="number" step="0.01" class="form-control" placeholder="Amount" required />
                         </div>
-                        <div class="col-12 text-end">
+                        <div class="col-6">
+                            <input name="Date" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        </div>
+                        <div class="col-6 text-end">
                             <button class="btn btn-success">Add Expense</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <!-- Quick-Add Budget -->
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -108,12 +117,45 @@
         </div>
     </div>
 
-    <!-- Charts Placeholder -->
-    <div class="row g-4" id="chartContainer">
-        <div class="col">
-            <div class="card border-dashed text-center py-5">
-                <i class="bi bi-bar-chart fs-1 text-muted mb-3"></i>
-                <p class="text-muted mb-0">No charts yet. Click "New Chart" to add one.</p>
+    <!-- Charts Section -->
+    <div class="row g-4 mb-5">
+        <!-- Budget vs Expense Chart -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Budget vs Expenses</h5>
+                    <canvas id="budgetVsExpenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses by Category Pie Chart -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Expenses by Category</h5>
+                    <canvas id="categoryExpenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Spending Line Chart -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Monthly Spending Trend</h5>
+                    <canvas id="monthlyExpenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Categories Horizontal Bar Chart -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Top Spending Categories</h5>
+                    <canvas id="topCategoriesChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -122,40 +164,127 @@
 <!-- Budget Setup Modal -->
 <div class="modal fade" id="setupModal" tabindex="-1">
     <div class="modal-dialog">
-        <form asp-controller="Home" asp-action="Setup" method="post" class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Budget Configuration</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label>Monthly Income</label>
-                    <input name="salary" type="number" step="0.01" class="form-control" placeholder="e.g. 5000" required />
-                </div>
-                <div class="mb-3">
-                    <label>Preset Strategy</label>
-                    <select name="preset" class="form-select">
-                        <option value="Default">Balanced (50/30/20)</option>
-                        <option value="High-Savings">High Savings (35/30/35)</option>
-                        <option value="Travel">Travel Focus (40/30/30)</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary">Apply</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- New Chart Modal (placeholder) -->
-<div class="modal fade" id="newChartModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content p-3">
-            <h5>Create Chart</h5>
-            <p>Select type &amp; data source to visualize your finances.</p>
-            <!-- implement as before -->
+        <div class="modal-content p-4 text-center">
+            <h5>🚧 Coming Soon</h5>
+            <p>This feature will let you auto-create budgets from your income.</p>
             <button class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
         </div>
     </div>
 </div>
+
+<!-- Chart.js Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Budget vs Expense Bar Chart
+        new Chart(document.getElementById('budgetVsExpenseChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Total Budgeted', 'Total Spent'],
+                datasets: [{
+                    label: 'Amount',
+                    data: [@totals.TotalBudgeted, @totals.TotalSpent],
+                    backgroundColor: ['#28a745', '#dc3545']
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // Expenses by Category Pie Chart
+        new Chart(document.getElementById('categoryExpenseChart'), {
+            type: 'pie',
+            data: {
+                labels: [@string.Join(", ", categoryExpenses.Keys.Select(k => $"'{k}'"))],
+                datasets: [{
+                    data: [@string.Join(", ", categoryExpenses.Values)],
+                    backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6f42c1', '#20c997']
+                }]
+            }
+        });
+
+        // Monthly Spending Line Chart
+        new Chart(document.getElementById('monthlyExpenseChart'), {
+            type: 'line',
+            data: {
+                labels: [@string.Join(", ", monthlyExpenses.Keys.Select(k => $"'{k}'"))],
+                datasets: [{
+                    label: 'Monthly Spending',
+                    data: [@string.Join(", ", monthlyExpenses.Values)],
+                    fill: false,
+                    borderColor: '#17a2b8',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        // Top Spending Categories Horizontal Bar Chart
+        new Chart(document.getElementById('topCategoriesChart'), {
+            type: 'bar',
+            data: {
+                labels: [@string.Join(", ", topCategories.Keys.Select(k => $"'{k}'"))],
+                datasets: [{
+                    label: 'Amount Spent',
+                    data: [@string.Join(", ", topCategories.Values)],
+                    backgroundColor: '#6610f2'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true } }
+            }
+        });
+    });
+</script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart: Spending by Category
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ChartData.ByCategory.Select(c => c.Category))),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.ChartData.ByCategory.Select(c => c.Total))),
+                    backgroundColor: ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa']
+                }]
+            }
+        });
+
+        // Line Chart: Monthly Spending
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ChartData.MonthlyTrend.Select(m => m.Month + '/' + m.Year))),
+                datasets: [{
+                    label: 'Monthly Spend',
+                    data: @Html.Raw(Json.Serialize(Model.ChartData.MonthlyTrend.Select(m => m.Total))),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            }
+        });
+
+        // Bar Chart: Budget vs Actual
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.ChartData.BudgetVsActual.Select(c => c.Category))),
+                datasets: [
+                    {
+                        label: 'Budgeted',
+                        data: @Html.Raw(Json.Serialize(Model.ChartData.BudgetVsActual.Select(c => c.Budgeted))),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    },
+                    {
+                        label: 'Actual',
+                        data: @Html.Raw(Json.Serialize(Model.ChartData.BudgetVsActual.Select(c => c.Actual))),
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                    }
+                ]
+            }
+        });
+    </script>
+}

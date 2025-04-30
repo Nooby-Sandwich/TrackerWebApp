@@ -22,12 +22,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
 builder.Services.AddControllersWithViews();
 
 // 4) Register CurrencyService with typed HttpClient + config
-builder.Services.AddHttpClient<ICurrencyService, CurrencyService>((sp, client) =>
-{
-    var config = sp.GetRequiredService<IConfiguration>();
-    var baseUrl = config["ExchangeRateHost:BaseUrl"];
-    client.BaseAddress = new Uri(baseUrl);
-});
+//builder.Services.AddHttpClient<ICurrencyService, CurrencyService>((sp, client) =>
+//{
+//    var config = sp.GetRequiredService<IConfiguration>();
+//    var baseUrl = config["ExchangeRateHost:BaseUrl"];
+//    client.BaseAddress = new Uri(baseUrl);
+//});
 
 
 var app = builder.Build();
