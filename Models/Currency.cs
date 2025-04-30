@@ -1,8 +1,14 @@
-﻿namespace TrackerWebApp.Models
+using System.ComponentModel.DataAnnotations;
+
+namespace TrackerWebApp.Models
 {
     public class Currency
     {
-        public string Code { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        [Required]
+        [StringLength(3, MinimumLength = 3)]
+        public string Code { get; set; }  // ISO 4217 currency code (e.g., "USD", "EUR")
+
+        [Required]
+        public string Name { get; set; }  // Descriptive name (e.g., "United States Dollar")
     }
 }

@@ -29,16 +29,11 @@
                         <a class="nav-link" asp-controller="Expenses" asp-action="Index">Expenses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Travel" asp-action="Index">Travel & Exchange</a>
+                        <a class="nav-link" asp-controller="Travel" asp-action="Index">Travel &amp; Exchange</a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item me-3">
-                        @* Currency selector partial *@
-                        <partial name="_CurrencySelector" />
-                    </li>
-
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">

@@ -16,6 +16,7 @@
             <option value="">-- choose --</option>
         </select>
     </div>
+
     <div class="col-md-4">
         <label asp-for="ToCurrency" class="form-label">To</label>
         <select asp-for="ToCurrency"
@@ -24,22 +25,20 @@
             <option value="">-- choose --</option>
         </select>
     </div>
+
     <div class="col-md-4">
         <label asp-for="Amount" class="form-label">Amount</label>
         <input asp-for="Amount" class="form-control" placeholder="Numeric value" />
     </div>
+
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">
-            Convert
-        </button>
+        <button type="submit" class="btn btn-primary">Convert</button>
     </div>
 </form>
 
 @if (Model.ConvertedAmount.HasValue)
 {
-        <div class="alert alert-success">
-            <strong>Result:</strong>
-        @Model.ConvertedAmount.Value.ToString("N2")
-        @Model.ToCurrency
+        <div class="alert alert-success mt-3">
+            <strong>Result:</strong> @Model.ConvertedAmount.Value.ToString("N2") @Model.ToCurrency
         </div>
 }

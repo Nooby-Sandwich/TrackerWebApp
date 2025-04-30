@@ -3,33 +3,52 @@ using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
 using TrackerWebApp.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DB context
+// 1) Add DB context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
-// Add Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// 2) Add Identity
+builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
+    opts.SignIn.RequireConfirmedAccount = false
+)
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Add MVC + Razor
+// 3) Add controllers + views
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
+// 4) Register CurrencyService with typed HttpClient + config
+builder.Services.AddHttpClient<ICurrencyService, CurrencyService>((sp, client) =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = config["ExchangeRateHost:BaseUrl"];
+    client.BaseAddress = new Uri(baseUrl);
+});
+
 
 var app = builder.Build();
-// Configure middleware (error pages, static files, routing)
+
+// 5) Middleware pipeline
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 6) Endpoint mapping
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 app.MapRazorPages();
 
 app.Run();

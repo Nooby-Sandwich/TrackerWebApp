@@ -1,108 +1,161 @@
 ﻿@model TrackerWebApp.Models.DashboardViewModel
 @using TrackerWebApp.Models
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Finance Dashboard";
-    var totals = Model.Totals ?? new FinancialTotals();
-    var budgets = ViewBag.Budgets as List<Budget> ?? new List<Budget>();
+    var totals = Model?.Totals ?? new FinancialTotals();
+    var budgets = ViewBag.BudgetsList as List<Budget> ?? new List<Budget>();
 }
 
 <div class="container-fluid px-4">
 
-    <header class="d-flex justify-content-between align-items-center py-4 mb-4 border-bottom">
-        <div class="d-flex align-items-center">
-            <i class="bi bi-pie-chart-fill fs-1 text-primary me-3"></i>
-            <div>
-                <h1 class="h2 mb-0">Financial Dashboard</h1>
-                <p class="text-muted mb-0">Track and manage your finances in real-time</p>
-            </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center py-4 mb-4 border-bottom">
+        <div>
+            <h1 class="h2 fw-bold text-primary">Financial Dashboard</h1>
+            <p class="text-muted">Track your budgets and expenses in real time</p>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#setupModal">
-                <i class="bi bi-percent me-2"></i> Budget Setup
-            </button>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newChartModal">
-                <i class="bi bi-plus-circle me-2"></i> New Visualization
+                <i class="bi bi-percent me-1"></i> Budget Setup
             </button>
         </div>
-    </header>
+    </div>
 
-    <!-- Metrics Section -->
-    <section class="row g-4 mb-5">
-        <partial name="_MetricCard" model='new MetricCardModel("Total Budgeted", "bi-coin", totals.TotalBudgeted.ToString("C"), (totals.TotalBudgeted - totals.TotalSpent).ToString("C") + " remaining", "bg-primary")' />
-        <partial name="_MetricCard" model='new MetricCardModel("Total Spent", "bi-currency-dollar", totals.TotalSpent.ToString("C"), "Spending this month", "bg-danger")' />
-        <partial name="_MetricCard" model='new MetricCardModel("Budgets Created", "bi-bar-chart-line", totals.TotalBudgets.ToString(), "Active budget categories", "bg-info")' />
-        <partial name="_MetricCard" model='new MetricCardModel("Expenses Logged", "bi-receipt", totals.TotalExpenses.ToString(), "Tracked individual expenses", "bg-warning")' />
+    <!-- Metric Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted">Total Income</h6>
+                    <h3>@totals.TotalIncome.ToString("C")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted">Total Expenses</h6>
+                    <h3>@totals.TotalExpenses.ToString("C")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted">Net Balance</h6>
+                    <h3>@totals.NetBalance.ToString("C")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted">Budgets Created</h6>
+                    <h3>@totals.TotalBudgets</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </section>
-
-    <!-- Quick Actions -->
-    <section class="row g-4 mb-5">
-        <!-- Record Expense -->
+    <!-- Quick-Add Widgets -->
+    <div class="row g-4 mb-5">
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h3 class="h5 card-title mb-4">Record Expense</h3>
+                    <h5 class="card-title">Quick-Add Expense</h5>
                     <form asp-controller="Expenses" asp-action="Create" method="post" class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input name="Description" class="form-control" placeholder="Dinner with clients" required />
+                        <div class="col-6">
+                            <input name="Description" class="form-control" placeholder="Description" required />
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Budget Category</label>
+                        <div class="col-3">
                             <select name="BudgetId" class="form-select" required>
+                                <option value="">Category</option>
                                 @foreach (var b in budgets)
                                 {
                                     <option value="@b.BudgetId">@b.Name</option>
                                 }
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Amount</label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input name="Amount" type="number" step="0.01" class="form-control" required />
-                            </div>
+                        <div class="col-3">
+                            <input name="Amount" type="number" step="0.01" class="form-control" placeholder="Amount" required />
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Date</label>
-                            <input name="Date" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                        </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-success w-100">
-                                <i class="bi bi-check-circle me-2"></i> Add Expense
-                            </button>
+                        <div class="col-12 text-end">
+                            <button class="btn btn-success">Add Expense</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- Create Budget -->
         <div class="col-12 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h3 class="h5 card-title mb-4">Create Budget</h3>
+                    <h5 class="card-title">Quick-Add Budget</h5>
                     <form asp-controller="Budgets" asp-action="Create" method="post" class="row g-3">
-                        <div class="col-md-8">
-                            <label class="form-label">Category Name</label>
-                            <input name="Name" class="form-control" placeholder="Marketing" required />
+                        <div class="col-8">
+                            <input name="Name" class="form-control" placeholder="Category name" required />
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Monthly Limit</label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input name="Limit" type="number" step="0.01" class="form-control" required />
-                            </div>
+                        <div class="col-4">
+                            <input name="Limit" type="number" step="0.01" class="form-control" placeholder="Limit" required />
                         </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-plus-circle me-2"></i> Create Budget
-                            </button>
+                        <div class="col-12 text-end">
+                            <button class="btn btn-primary">Add Budget</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Charts Placeholder -->
+    <div class="row g-4" id="chartContainer">
+        <div class="col">
+            <div class="card border-dashed text-center py-5">
+                <i class="bi bi-bar-chart fs-1 text-muted mb-3"></i>
+                <p class="text-muted mb-0">No charts yet. Click "New Chart" to add one.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Budget Setup Modal -->
+<div class="modal fade" id="setupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form asp-controller="Home" asp-action="Setup" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Budget Configuration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Monthly Income</label>
+                    <input name="salary" type="number" step="0.01" class="form-control" placeholder="e.g. 5000" required />
+                </div>
+                <div class="mb-3">
+                    <label>Preset Strategy</label>
+                    <select name="preset" class="form-select">
+                        <option value="Default">Balanced (50/30/20)</option>
+                        <option value="High-Savings">High Savings (35/30/35)</option>
+                        <option value="Travel">Travel Focus (40/30/30)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- New Chart Modal (placeholder) -->
+<div class="modal fade" id="newChartModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content p-3">
+            <h5>Create Chart</h5>
+            <p>Select type &amp; data source to visualize your finances.</p>
+            <!-- implement as before -->
+            <button class="btn btn-secondary mt-3" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
 </div>
