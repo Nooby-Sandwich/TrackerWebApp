@@ -1,38 +1,28 @@
+﻿// Program.cs
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackerWebApp.Data;
-using TrackerWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1) Add DB context
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
+// 1) EF Core + SQL Server
+builder.Services.AddDbContext<ApplicationDbContext>(opts =>
+    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// 2) Add Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
-    opts.SignIn.RequireConfirmedAccount = false
-)
-.AddEntityFrameworkStores<ApplicationDbContext>();
+// 2) Identity UI + EF store
+builder.Services.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// 3) Add controllers + views
+// 3) MVC controllers + views
 builder.Services.AddControllersWithViews();
 
-// 4) Register CurrencyService with typed HttpClient + config
-//builder.Services.AddHttpClient<ICurrencyService, CurrencyService>((sp, client) =>
-//{
-//    var config = sp.GetRequiredService<IConfiguration>();
-//    var baseUrl = config["ExchangeRateHost:BaseUrl"];
-//    client.BaseAddress = new Uri(baseUrl);
-//});
-
+// 4) Razor Pages (for /Areas/Identity)
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// 5) Middleware pipeline
+// 5) Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,11 +30,12 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 6) Endpoint mapping
+// 6) Routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"

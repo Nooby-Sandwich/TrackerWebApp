@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
-    <Compile Remove="Areas\Identity\Pages\Account\Register.cshtml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Areas\Identity\Pages\Account\Login.cshtml.cs" />
-    <Content Include="Areas\Identity\Pages\Account\Register.cshtml.cs" />
     <Content Include="Services\CurrencyService.cs" />
     <Content Include="Services\ICurrencyService.cs" />
   </ItemGroup>
