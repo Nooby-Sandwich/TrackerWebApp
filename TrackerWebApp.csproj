@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Services\CurrencyService.cs" />
-    <Content Include="Services\ICurrencyService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\Travel\Index.cshtml" />
   </ItemGroup>
 

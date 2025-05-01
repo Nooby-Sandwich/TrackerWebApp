@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,43 +20,53 @@ public class HomeController : Controller
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        // 1) load all budgets & expenses (for charts)
         var budgets = await _context.Budgets
             .Where(b => b.UserId == userId)
             .ToListAsync();
 
-        var expenses = await _context.Expenses
+        var allExpenses = await _context.Expenses
             .Where(e => e.UserId == userId)
             .Include(e => e.Budget)
             .ToListAsync();
 
-        var totals = new FinancialTotals
-        {
-            TotalBudgeted = budgets.Sum(b => b.Limit),
-            TotalSpent = expenses.Sum(e => e.Amount),
-            TotalBudgets = budgets.Count,
-            TotalExpenses = expenses.Count
-        };
+        // 2) compute monthly totals (for the top cards & chart1)
+        var firstOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        var thisMonthSpent = allExpenses
+            .Where(e => e.Date >= firstOfMonth)
+            .Sum(e => e.Amount);
 
-        // FIXED: Changed b.Id to b.BudgetId
-        var budgetVsActual = budgets.Select(b => new CategoryBudgetActual(
-            b.Name,
-            b.Limit,
-            expenses.Where(e => e.BudgetId == b.BudgetId).Sum(e => e.Amount)
-        )).ToList();
+        var monthlyBudget = budgets.Sum(b => b.Limit);
 
-        var byCategory = expenses
+        // 3) compute six-month series (for the 2×2 grid charts)
+        var budgetVsActual = budgets
+            .Select(b => new CategoryBudgetActual(
+                b.Name,
+                b.Limit,
+                allExpenses.Where(e => e.BudgetId == b.BudgetId).Sum(e => e.Amount)
+            )).ToList();
+
+        var byCategory = allExpenses
             .GroupBy(e => e.Budget?.Name ?? "Uncategorized")
             .Select(g => new CategorySpend(g.Key, g.Sum(e => e.Amount)))
             .ToList();
 
-        var monthlyTrend = expenses
+        var monthlyTrend = allExpenses
             .GroupBy(e => new { e.Date.Year, e.Date.Month })
             .Select(g => new MonthlySpend(g.Key.Year, g.Key.Month, g.Sum(e => e.Amount)))
-            .OrderBy(g => g.Year)
-            .ThenBy(g => g.Month)
+            .OrderBy(x => x.Year).ThenBy(x => x.Month)
             .ToList();
 
-        var model = new DashboardViewModel
+        // 4) build ViewModel
+        var totals = new FinancialTotals
+        {
+            TotalBudgeted = monthlyBudget,
+            TotalSpent = thisMonthSpent,
+            TotalBudgets = budgets.Count,
+            TotalExpenses = allExpenses.Count
+        };
+
+        var vm = new DashboardViewModel
         {
             Totals = totals,
             ChartData = new ChartData
@@ -64,9 +75,9 @@ public class HomeController : Controller
                 ByCategory = byCategory,
                 MonthlyTrend = monthlyTrend
             },
-            PinnedCharts = new List<string> { "ByCategory", "MonthlyTrend", "BudgetVsActual" }
+            PinnedCharts = new() { "ByCategory", "MonthlyTrend", "BudgetVsActual" }
         };
 
-        return View(model);
+        return View(vm);
     }
 }

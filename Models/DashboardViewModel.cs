@@ -8,6 +8,7 @@ namespace TrackerWebApp.Models
     /// </summary>
     public class DashboardViewModel
     {
+
         /// <summary>Total counts and sums</summary>
         public FinancialTotals Totals { get; set; } = new FinancialTotals();
 
