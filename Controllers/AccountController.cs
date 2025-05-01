@@ -7,15 +7,13 @@ namespace TrackerWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signIn;
-        private readonly UserManager<IdentityUser> _users;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AccountController(
-            UserManager<IdentityUser> users,
-            SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
-            _users = users;
-            _signIn = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -24,17 +22,23 @@ namespace TrackerWebApp.Controllers
             return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel m)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View(m);
+            if (!ModelState.IsValid)
+                return View(model);
 
-            var result = await _signIn.PasswordSignInAsync(m.Email, m.Password, m.RememberMe, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
             if (result.Succeeded)
-                return LocalRedirect(m.ReturnUrl ?? Url.Content("~/"));
+            {
+                return LocalRedirect(model.ReturnUrl ?? Url.Content("~/"));
+            }
 
-            ModelState.AddModelError("", "Invalid login attempt");
-            return View(m);
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
         }
 
         [HttpGet]
@@ -43,29 +47,33 @@ namespace TrackerWebApp.Controllers
             return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel m)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return View(m);
+            if (!ModelState.IsValid)
+                return View(model);
 
-            var user = new IdentityUser { UserName = m.Email, Email = m.Email };
-            var res = await _users.CreateAsync(user, m.Password);
-            if (res.Succeeded)
+            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                await _signIn.SignInAsync(user, isPersistent: false);
-                return LocalRedirect(m.ReturnUrl ?? Url.Content("~/"));
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(model.ReturnUrl ?? Url.Content("~/"));
             }
 
-            foreach (var e in res.Errors)
-                ModelState.AddModelError("", e.Description);
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
 
-            return View(m);
+            return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signIn.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }
