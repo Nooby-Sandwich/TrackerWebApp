@@ -7,134 +7,156 @@
     var C = Model.ChartData;
 }
 
-<div class="container-fluid px-4">
-
-    <!-- Page title + action buttons -->
-    <div class="d-flex justify-content-between align-items-center my-4">
-        <h1 class="h3 mb-0">Dashboard</h1>
-        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#setupModal">
-            <i class="bi bi-gear me-1"></i> Setup Budgets
-        </button>
+<div class="row mb-4">
+    @* Top 4 metrics *@
+    <div class="col-6 col-md-3">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <small class="text-uppercase text-muted">Budgeted</small>
+                <h4 class="mb-0">@T.TotalBudgeted.ToString("C")</h4>
+            </div>
+        </div>
     </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <small class="text-uppercase text-muted">Spent</small>
+                <h4 class="mb-0">@T.TotalSpent.ToString("C")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <small class="text-uppercase text-muted">Budgets</small>
+                <h4 class="mb-0">@T.TotalBudgets</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <small class="text-uppercase text-muted">Transactions</small>
+                <h4 class="mb-0">@T.TotalExpenses</h4>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Top metrics -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-5">
-        @* helper to render each card *@
-        @foreach (var metric in new[]
-        {
-        (Label: "Budgeted (mo)", Value: T.TotalBudgeted.ToString("C")),
-        (Label: "Spent (mo)",    Value: T.TotalSpent.ToString("C")),
-        (Label: "Budgets",       Value: T.TotalBudgets.ToString()),
-        (Label: "Transactions",  Value: T.TotalExpenses.ToString())
-        })
-        {
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <small class="text-uppercase text-muted">@metric.Label</small>
-                        <h4 class="mt-2">@metric.Value</h4>
+<div class="row mb-4">
+    @* Quick-add forms (no more null-refs) *@
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">Quick-Add Expense</div>
+            <div class="card-body">
+                <form asp-controller="Expenses"
+                      asp-action="Create"
+                      method="post"
+                      class="row gx-2 gy-2">
+                    <div class="col-6">
+                        <input name="Description"
+                               class="form-control"
+                               placeholder="Description"
+                               required />
                     </div>
-                </div>
-            </div>
-        }
-    </div>
-
-    <!-- Quick-add forms -->
-    <div class="row g-4 mb-5">
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <strong>Quick-Add Expense</strong>
-                </div>
-                <div class="card-body">
-                    <form asp-controller="Expenses" asp-action="Create" method="post" class="row gy-2 gx-3 align-items-end">
-                        <div class="col-6">
-                            <label class="form-label">Description</label>
-                            <input name="Description" class="form-control" placeholder="Dinner, Uber…" required />
-                        </div>
-                        <div class="col-3">
-                            <label class="form-label">Category</label>
-                            <select name="BudgetId" class="form-select" required>
-                                <option value="">Select…</option>
-                                @foreach (var b in ViewBag.Budgets as List<Budget>)
-                                {
-                                    <option value="@b.BudgetId">@b.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class="form-label">Amount</label>
-                            <input name="Amount" type="number" step="0.01" class="form-control" placeholder="0.00" required />
-                        </div>
-                        <div class="col-1 text-end">
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <strong>Quick-Add Budget</strong>
-                </div>
-                <div class="card-body">
-                    <form asp-controller="Budgets" asp-action="Create" method="post" class="row gy-2 gx-3 align-items-end">
-                        <div class="col-8">
-                            <label class="form-label">Category</label>
-                            <input name="Name" class="form-control" placeholder="Groceries, Rent…" required />
-                        </div>
-                        <div class="col-3">
-                            <label class="form-label">Limit</label>
-                            <input name="Limit" type="number" step="0.01" class="form-control" placeholder="₹" required />
-                        </div>
-                        <div class="col-1 text-end">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="col-3">
+                        <select name="BudgetId"
+                                class="form-select"
+                                required>
+                            <option value="">Category</option>
+                            @foreach (var b in C.BudgetVsActual)
+                            {
+                                <option value="@b.Category">
+                                    @b.Category
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <input name="Amount"
+                               type="number"
+                               step="0.01"
+                               class="form-control"
+                               placeholder="Amt"
+                               required />
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-success w-100">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Charts section -->
-    <h5 class="mb-3">Visualizations</h5>
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title">Monthly Spend Breakdown</h6>
-                    <canvas id="donut1" height="200"></canvas>
-                </div>
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">Quick-Add Budget</div>
+            <div class="card-body">
+                <form asp-controller="Budgets"
+                      asp-action="Create"
+                      method="post"
+                      class="row gx-2 gy-2">
+                    <div class="col-8">
+                        <input name="Name"
+                               class="form-control"
+                               placeholder="Category"
+                               required />
+                    </div>
+                    <div class="col-3">
+                        <input name="Limit"
+                               type="number"
+                               step="0.01"
+                               class="form-control"
+                               placeholder="Limit"
+                               required />
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-primary w-100">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title">Budget vs Actual (radar)</h6>
-                    <canvas id="radar1" height="200"></canvas>
-                </div>
+    </div>
+</div>
+
+<h5 class="mb-3">Visualizations</h5>
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Monthly Spend Breakdown</div>
+            <div class="card-body">
+                <canvas id="donutChart"></canvas>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title">Monthly Trend</h6>
-                    <canvas id="line1" height="200"></canvas>
-                </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Budget vs Actual</div>
+            <div class="card-body">
+                <canvas id="radarChart"></canvas>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title">Top Categories</h6>
-                    <canvas id="hbar1" height="200"></canvas>
-                </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Monthly Trend</div>
+            <div class="card-body">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Top Categories</div>
+            <div class="card-body">
+                <canvas id="barChart"></canvas>
             </div>
         </div>
     </div>
@@ -143,59 +165,111 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const blueSet = ['#1E3A8A','#3B82F6','#60A5FA','#93C5FD','#BFDBFE'];
+        document.addEventListener("DOMContentLoaded", () => {
+          const palette = [
+            "#1E3A8A",
+            "#3B82F6",
+            "#60A5FA",
+            "#93C5FD",
+            "#BFDBFE",
+          ];
 
           // Donut
-          new Chart('donut1', {
-            type: 'doughnut',
+          new Chart("donutChart", {
+            type: "doughnut",
             data: {
-              labels: @Html.Raw(Json.Serialize(C.ByCategory.Select(c => c.Category))),
-              datasets:[{ data: @Html.Raw(Json.Serialize(C.ByCategory.Select(c => c.Total))),
-                          backgroundColor: blueSet }]
+              labels: @Html.Raw(
+           Json.Serialize(C.ByCategory.Select(c => c.Category))
+         ),
+              datasets: [
+                {
+                  data: @Html.Raw(
+             Json.Serialize(C.ByCategory.Select(c => c.Total))
+           ),
+                  backgroundColor: palette,
+                },
+              ],
             },
-            options:{ cutout:'60%', plugins:{ legend:{ position:'bottom' } } }
+            options: {
+              cutout: "60%",
+              plugins: { legend: { position: "bottom" } },
+            },
           });
 
           // Radar
-          new Chart('radar1', {
-            type:'radar',
-            data:{
-              labels: @Html.Raw(Json.Serialize(C.BudgetVsActual.Select(b => b.Category))),
-              datasets:[
-                { label:'Budgeted',
-                  data: @Html.Raw(Json.Serialize(C.BudgetVsActual.Select(b => b.Budgeted))),
-                  borderColor:blueSet[1], backgroundColor:'rgba(59,130,246,0.4)' },
-                { label:'Actual',
-                  data: @Html.Raw(Json.Serialize(C.BudgetVsActual.Select(b => b.Actual))),
-                  borderColor:blueSet[4], backgroundColor:'rgba(191,219,254,0.4)' }
-              ]
+          new Chart("radarChart", {
+            type: "radar",
+            data: {
+              labels: @Html.Raw(
+           Json.Serialize(C.BudgetVsActual.Select(b => b.Category))
+         ),
+              datasets: [
+                {
+                  label: "Budgeted",
+                  data: @Html.Raw(
+             Json.Serialize(C.BudgetVsActual.Select(b => b.Budgeted))
+           ),
+                  borderColor: palette[1],
+                  backgroundColor: "rgba(59,130,246,0.4)",
+                },
+                {
+                  label: "Actual",
+                  data: @Html.Raw(
+             Json.Serialize(C.BudgetVsActual.Select(b => b.Actual))
+           ),
+                  borderColor: palette[4],
+                  backgroundColor: "rgba(191,219,254,0.4)",
+                },
+              ],
             },
-            options:{ scales:{ r:{ beginAtZero:true } },
-                      plugins:{ legend:{ position:'top' } } }
+            options: {
+              scales: { r: { beginAtZero: true } },
+              plugins: { legend: { position: "top" } },
+            },
           });
 
           // Line
-          new Chart('line1', {
-            type:'line',
-            data:{
-              labels: @Html.Raw(Json.Serialize(C.MonthlyTrend.Select(m => $"{m.Month}/{m.Year}"))),
-              datasets:[{ label:'₹ Spent',
-                          data: @Html.Raw(Json.Serialize(C.MonthlyTrend.Select(m => m.Total))),
-                          borderColor:blueSet[2], fill:false, tension:0.2 }]
+          new Chart("lineChart", {
+            type: "line",
+            data: {
+              labels: @Html.Raw(
+           Json.Serialize(
+             C.MonthlyTrend.Select(m => $"{m.Month}/{m.Year}")
+           )
+         ),
+              datasets: [
+                {
+                  label: "₹ Spent",
+                  data: @Html.Raw(
+             Json.Serialize(C.MonthlyTrend.Select(m => m.Total))
+           ),
+                  borderColor: palette[2],
+                  tension: 0.2,
+                  fill: false,
+                },
+              ],
             },
-            options:{ scales:{ y:{ beginAtZero:true } } }
+            options: { scales: { y: { beginAtZero: true } } },
           });
 
-          // Horizontal Bar
-          const top5 = C.ByCategory.sort((a,b)=>b.Total-a.Total).slice(0,5);
-          new Chart('hbar1', {
-            type:'bar',
-            data:{
-              labels: top5.map(x=>x.Category),
-              datasets:[{ label:'₹', data: top5.map(x=>x.Total), backgroundColor:blueSet[3] }]
+          // Bar
+          const top5 = C.ByCategory.sort((a, b) => b.Total - a.Total).slice(0, 5);
+          new Chart("barChart", {
+            type: "bar",
+            data: {
+              labels: top5.map((x) => x.Category),
+              datasets: [
+                {
+                  label: "₹",
+                  data: top5.map((x) => x.Total),
+                  backgroundColor: palette[3],
+                },
+              ],
             },
-            options:{ indexAxis:'y', scales:{ x:{ beginAtZero:true } } }
+            options: {
+              indexAxis: "y",
+              scales: { x: { beginAtZero: true } },
+            },
           });
         });
     </script>

@@ -45,10 +45,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // 6) Map both MVC controllers and Razor Pages (for Identity UI)
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
-);
-app.MapRazorPages(); // ✅ Enables /Identity/Account/... pages
+app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 app.Run();

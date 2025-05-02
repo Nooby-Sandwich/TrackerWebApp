@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -16,67 +17,57 @@ public class HomeController : Controller
         _context = context;
     }
 
+    [Authorize] // require login to view dashboards
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // 1) load all budgets & expenses (for charts)
+        // 1) Load budgets & expenses for this user
         var budgets = await _context.Budgets
             .Where(b => b.UserId == userId)
             .ToListAsync();
-
-        var allExpenses = await _context.Expenses
+        var expenses = await _context.Expenses
             .Where(e => e.UserId == userId)
-            .Include(e => e.Budget)
             .ToListAsync();
 
-        // 2) compute monthly totals (for the top cards & chart1)
-        var firstOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-        var thisMonthSpent = allExpenses
-            .Where(e => e.Date >= firstOfMonth)
-            .Sum(e => e.Amount);
-
-        var monthlyBudget = budgets.Sum(b => b.Limit);
-
-        // 3) compute six-month series (for the 2×2 grid charts)
-        var budgetVsActual = budgets
-            .Select(b => new CategoryBudgetActual(
-                b.Name,
-                b.Limit,
-                allExpenses.Where(e => e.BudgetId == b.BudgetId).Sum(e => e.Amount)
-            )).ToList();
-
-        var byCategory = allExpenses
-            .GroupBy(e => e.Budget?.Name ?? "Uncategorized")
-            .Select(g => new CategorySpend(g.Key, g.Sum(e => e.Amount)))
-            .ToList();
-
-        var monthlyTrend = allExpenses
-            .GroupBy(e => new { e.Date.Year, e.Date.Month })
-            .Select(g => new MonthlySpend(g.Key.Year, g.Key.Month, g.Sum(e => e.Amount)))
-            .OrderBy(x => x.Year).ThenBy(x => x.Month)
-            .ToList();
-
-        // 4) build ViewModel
+        // 2) Compute totals
         var totals = new FinancialTotals
         {
-            TotalBudgeted = monthlyBudget,
-            TotalSpent = thisMonthSpent,
+            TotalBudgeted = budgets.Sum(b => b.Limit),
+            TotalSpent = expenses.Sum(e => e.Amount),
             TotalBudgets = budgets.Count,
-            TotalExpenses = allExpenses.Count
+            TotalExpenses = expenses.Count
         };
 
+        // 3) Chart data
+        var chartData = new ChartData
+        {
+            BudgetVsActual = budgets.Select(b => new CategoryBudgetActual(
+                b.Name,
+                b.Limit,
+                expenses.Where(e => e.BudgetId == b.BudgetId).Sum(e => e.Amount)
+            )).ToList(),
+            ByCategory = expenses
+                .GroupBy(e => budgets.FirstOrDefault(b => b.BudgetId == e.BudgetId)?.Name ?? "Uncategorized")
+                .Select(g => new CategorySpend(g.Key, g.Sum(e => e.Amount)))
+                .ToList(),
+            MonthlyTrend = expenses
+                .GroupBy(e => new { e.Date.Year, e.Date.Month })
+                .Select(g => new MonthlySpend(g.Key.Year, g.Key.Month, g.Sum(e => e.Amount)))
+                .OrderBy(x => x.Year).ThenBy(x => x.Month)
+                .ToList()
+        };
+
+        // 4) Build VM
         var vm = new DashboardViewModel
         {
             Totals = totals,
-            ChartData = new ChartData
-            {
-                BudgetVsActual = budgetVsActual,
-                ByCategory = byCategory,
-                MonthlyTrend = monthlyTrend
-            },
-            PinnedCharts = new() { "ByCategory", "MonthlyTrend", "BudgetVsActual" }
+            ChartData = chartData,
+            PinnedCharts = new List<string> { "ByCategory", "MonthlyTrend", "BudgetVsActual" }
         };
+
+        // 5) Also pass raw budgets for your quick-add dropdown
+        ViewBag.Budgets = budgets;
 
         return View(vm);
     }
