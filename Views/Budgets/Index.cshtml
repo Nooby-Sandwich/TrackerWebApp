@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TrackerWebApp.Models.Budget>
+
+@{
+    ViewData["Title"] = "Your Budgets";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ New Budget</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Limit</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var budget in Model)
+        {
+            <tr>
+                <td>@budget.Name</td>
+                <td>@budget.Limit.ToString("C")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@budget.BudgetId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@budget.BudgetId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@budget.BudgetId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

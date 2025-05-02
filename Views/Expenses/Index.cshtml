@@ -1,0 +1,39 @@
+﻿@model IEnumerable<TrackerWebApp.Models.Expense>
+
+@{
+    ViewData["Title"] = "Your Expenses";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ New Expense</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Budget</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var exp in Model)
+        {
+            <tr>
+                <td>@exp.Description</td>
+                <td>@exp.Amount.ToString("C")</td>
+                <td>@exp.Date.ToShortDateString()</td>
+                <td>@exp.Budget?.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@exp.ExpenseId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@exp.ExpenseId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@exp.ExpenseId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
